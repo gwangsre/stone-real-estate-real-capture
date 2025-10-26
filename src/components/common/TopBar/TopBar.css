@@ -1,0 +1,54 @@
+.topbar {
+  background: #0f172a !important; /* match dashboard sidebar */
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.topbar-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.topbar-link:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.logo-img {
+  display: block;
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Icon accent style for better contrast on dark background */
+/* Neutral icon styling */
+.icon-accent {
+  color: #ffffff !important;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.icon-accent:hover {
+  color: #e2e8f0 !important;
+  background: rgba(255,255,255,0.08);
+}
+.icon-accent:active {
+  color: #cbd5e1 !important;
+}
+
+.account-menu .MuiPaper-root {
+  background: #ffffff;
+}
+
+.topbar .MuiIconButton-root { 
+  color: #ffffff; 
+}
+
+@media (max-width: 600px) {
+  .topbar-link { padding: 8px 10px; font-size: 0.75rem; }
+  .logo-img { height: 34px; }
+}
