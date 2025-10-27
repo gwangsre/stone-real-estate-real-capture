@@ -26,6 +26,8 @@ export default function HomePage() {
   const [timeframe, setTimeframe] = React.useState("");
   const [buying, setBuying] = React.useState("");
   const [suburbValue, setSuburbValue] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [statusMessage, setStatusMessage] = React.useState("");
   const [showSubmittedMessage, setShowSubmittedMessage] = React.useState(false);
@@ -72,18 +74,18 @@ export default function HomePage() {
     try {
       const formEl = e.target;
       const formData = new FormData(formEl);
-      const payload = {
+        const payload = {
         first_name: (formData.get("first_name") || "").trim(),
         last_name: (formData.get("last_name") || "").trim(),
         email: (formData.get("email") || "").toLowerCase(),
         phone: (formData.get("phone") || "").trim(),
         suburb: suburbValue || formData.get("suburb") || "",
+        address: (formData.get("address") || "").trim(),
         timeframe: formData.get("timeframe") || "",
+        description: (formData.get("description") || "").trim(),
         interested: formData.get("interested") || "",
         interested_buying: formData.get("interested_buying") || "",
-      };
-
-      const vErrors = validate(payload);
+      };      const vErrors = validate(payload);
       if (Object.keys(vErrors).length > 0) {
         setErrors(vErrors);
         setSubmitting(false);
@@ -117,6 +119,8 @@ export default function HomePage() {
   setTimeframe("");
   setBuying("");
   setSuburbValue("");
+  setAddress("");
+  setDescription("");
 
       // Fetch message first from new public endpoint
       let finalMsg = "";
@@ -238,6 +242,19 @@ export default function HomePage() {
                     </FormControl>
                   </Grid>
 
+                  <Grid item xs={12}>
+                    <TextField
+                      name="address"
+                      label="Address (Optional)"
+                      fullWidth
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077"
+                      error={!!errors.address}
+                      helperText={errors.address}
+                    />
+                  </Grid>
+
                   {/* <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
                       <FormLabel>Are you interested in selling a property?</FormLabel>
@@ -301,6 +318,21 @@ export default function HomePage() {
                       </Select>
                       {errors.timeframe && <FormHelperText>{errors.timeframe}</FormHelperText>}
                     </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      name="description"
+                      label="Description (Optional)"
+                      fullWidth
+                      multiline
+                      rows={3}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
+                      error={!!errors.description}
+                      helperText={errors.description}
+                    />
                   </Grid>
 
                   <Grid item xs={12}>
