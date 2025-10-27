@@ -8,8 +8,9 @@
 
 .dashboard-root{
   display:flex;
-  min-height:80vh;
+  min-height:calc(100vh - 120px);
   background:var(--bg);
+  margin-bottom:0;
 }
 
 .dashboard-sidebar{
@@ -52,6 +53,7 @@
 .dashboard-main{
   flex:1;
   padding:20px;
+  margin-bottom:0;
 }
 
 .dashboard-header{
@@ -125,6 +127,7 @@
   border-radius:8px;
   min-height:400px;
   box-shadow:0 2px 8px rgba(16,24,40,0.04);
+  margin-bottom:0;
 }
 
 .table-wrap{position:relative;max-width:100%;overflow-x:auto;overflow-y:hidden;}
@@ -179,6 +182,14 @@
 }
 /* Prevent whole page horizontal scroll; only table-wrap should scroll */
 body, .dashboard-root, .dashboard-main{overflow-x:hidden;}
+
+/* Remove any unwanted spacing between dashboard and footer */
+.dashboard-root *{
+  margin-bottom:0;
+}
+.dashboard-root > *:last-child{
+  margin-bottom:0;
+}
 
 /* Modal styles */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:1000}
