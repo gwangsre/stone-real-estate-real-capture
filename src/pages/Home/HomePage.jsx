@@ -70,12 +70,18 @@ export default function HomePage() {
   React.useEffect(() => {
     const fetchFormHeader = async () => {
       try {
-        const response = await fetch('/api/v1/form-header');
+        console.log('Fetching form header from:', API_CONFIG.FORM_HEADER.PUBLIC); // Debug log
+        const response = await fetch(API_CONFIG.FORM_HEADER.PUBLIC);
         if (response.ok) {
           const data = await response.json();
-          if (data?.message) {
-            setFormHeaderText(data.message);
+          console.log('Form header data received:', data); // Debug log
+          // Handle different response formats
+          const message = data?.message || data?.data?.message || data;
+          if (message && typeof message === 'string') {
+            setFormHeaderText(message);
           }
+        } else {
+          console.log('Form header fetch failed with status:', response.status);
         }
       } catch (error) {
         console.log('Could not fetch form header:', error);

@@ -705,9 +705,13 @@ export default function DashboardPage() {
     setFormHeaderLoading(true);
     setFormHeaderError(null);
     try {
-      const { data } = await api.get('/api/v1/form-header');
+      console.log('Fetching form header from dashboard...'); // Debug log
+      const response = await api.get('/api/v1/form-header');
+      console.log('Form header response:', response); // Debug log
+      const data = response.data || response;
       setFormHeader(data || { message: "" });
     } catch (err) {
+      console.error('Form header fetch error:', err); // Debug log
       setFormHeaderError(err.message || "Failed to load form header");
       setFormHeader({ message: "" });
     } finally {
@@ -720,9 +724,13 @@ export default function DashboardPage() {
     setFooterLoading(true);
     setFooterError(null);
     try {
-      const { data } = await api.get('/api/v1/footer');
+      console.log('Fetching footer from dashboard...'); // Debug log
+      const response = await api.get('/api/v1/footer');
+      console.log('Footer response:', response); // Debug log
+      const data = response.data || response;
       setFooter(data || { message: "" });
     } catch (err) {
+      console.error('Footer fetch error:', err); // Debug log
       setFooterError(err.message || "Failed to load footer");
       setFooter({ message: "" });
     } finally {
