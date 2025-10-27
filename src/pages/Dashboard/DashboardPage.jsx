@@ -705,11 +705,20 @@ export default function DashboardPage() {
     setFormHeaderLoading(true);
     setFormHeaderError(null);
     try {
-      console.log('Fetching form header from dashboard...'); // Debug log
-      const response = await api.get('/api/v1/form-header');
-      console.log('Form header response:', response); // Debug log
-      const data = response.data || response;
-      setFormHeader(data || { message: "" });
+      console.log('Fetching form header from dashboard using fetch API...'); // Debug log
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/form-header`);
+      console.log('Form header response status:', response.status); // Debug log
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Form header data:', data); // Debug log
+        
+        // Handle different response formats
+        const message = data?.message || data?.data?.message || data;
+        setFormHeader({ message: message || "" });
+      } else {
+        throw new Error(`HTTP ${response.status}: Failed to fetch form header`);
+      }
     } catch (err) {
       console.error('Form header fetch error:', err); // Debug log
       setFormHeaderError(err.message || "Failed to load form header");
@@ -724,11 +733,20 @@ export default function DashboardPage() {
     setFooterLoading(true);
     setFooterError(null);
     try {
-      console.log('Fetching footer from dashboard...'); // Debug log
-      const response = await api.get('/api/v1/footer');
-      console.log('Footer response:', response); // Debug log
-      const data = response.data || response;
-      setFooter(data || { message: "" });
+      console.log('Fetching footer from dashboard using fetch API...'); // Debug log
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/footer`);
+      console.log('Footer response status:', response.status); // Debug log
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Footer data:', data); // Debug log
+        
+        // Handle different response formats
+        const message = data?.message || data?.data?.message || data;
+        setFooter({ message: message || "" });
+      } else {
+        throw new Error(`HTTP ${response.status}: Failed to fetch footer`);
+      }
     } catch (err) {
       console.error('Footer fetch error:', err); // Debug log
       setFooterError(err.message || "Failed to load footer");
