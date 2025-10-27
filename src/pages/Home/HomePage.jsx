@@ -233,13 +233,11 @@ export default function HomePage() {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       name="description"
                       label="Description (Optional)"
                       fullWidth
-                      multiline
-                      rows={3}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
