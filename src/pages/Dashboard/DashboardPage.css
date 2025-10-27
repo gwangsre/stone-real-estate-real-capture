@@ -141,6 +141,16 @@
 /* Add sortable cursor */
 .leads-table th.sortable{cursor:pointer;user-select:none}
 .leads-table th.sortable:hover{background:#e2e8f0}
+
+/* Responsive adjustments for long text columns */
+@media (max-width:1200px){
+  /* Make address and description columns more compact on smaller screens */
+  .leads-table td[title] {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 .leads-table th{background:#f1f5f9;color:var(--muted);font-weight:600;font-size:13px}
 .leads-table td.mono{font-family:monospace;font-size:13px;color:#0f172a}
 .inline-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}

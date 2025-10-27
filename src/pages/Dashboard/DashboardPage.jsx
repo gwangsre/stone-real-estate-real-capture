@@ -316,13 +316,13 @@ export default function DashboardPage() {
         'Status': getLeadStatus(l),
         'Selling': toYesNo(c.selling_interest ?? c.interested),
         'Buying': toYesNo(c.buying_interest ?? l.metadata?.custom_fields?.buying_interest),
-        'Suburb': c.suburb || '',
-        'Address': c.address || '',
-        'Timeframe': c.timeframe || '',
-        'Description': c.description || '',
   // Preferred Contact removed
         'Email': c.email || '',
         'Phone': c.phone || '',
+        'Address': c.address || '',
+        'Description': c.description || '',
+        'Suburb': c.suburb || '',
+        'Timeframe': c.timeframe || '',
         'Updated': formatDate(l.metadata?.updated_at) || ''
       };
     });
@@ -754,13 +754,13 @@ export default function DashboardPage() {
                         <th onClick={()=>toggleSort('status')} className="sortable">Status {leadSort.field==='status' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         <th onClick={()=>toggleSort('selling')} className="sortable">Selling {leadSort.field==='selling' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         <th onClick={()=>toggleSort('buying')} className="sortable">Buying {leadSort.field==='buying' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
-                        <th onClick={()=>toggleSort('suburb')} className="sortable">Suburb {leadSort.field==='suburb' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
-                        <th onClick={()=>toggleSort('address')} className="sortable">Address {leadSort.field==='address' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
-                        <th onClick={()=>toggleSort('timeframe')} className="sortable">Timeframe {leadSort.field==='timeframe' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
-                        <th onClick={()=>toggleSort('description')} className="sortable">Description {leadSort.field==='description' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         {/* Preferred Contact column removed */}
                         <th onClick={()=>toggleSort('email')} className="sortable">Email {leadSort.field==='email' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         <th onClick={()=>toggleSort('phone')} className="sortable">Phone {leadSort.field==='phone' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
+                        <th onClick={()=>toggleSort('address')} className="sortable">Address {leadSort.field==='address' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
+                        <th onClick={()=>toggleSort('description')} className="sortable">Description {leadSort.field==='description' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
+                        <th onClick={()=>toggleSort('suburb')} className="sortable">Suburb {leadSort.field==='suburb' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
+                        <th onClick={()=>toggleSort('timeframe')} className="sortable">Timeframe {leadSort.field==='timeframe' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         <th onClick={()=>toggleSort('updated')} className="sortable">Updated {leadSort.field==='updated' ? (leadSort.direction==='asc'?'▲':'▼') : ''}</th>
                         <th>Actions</th>
                       </tr>
@@ -803,13 +803,13 @@ export default function DashboardPage() {
                             </td>
                             <td>{toYesNo(c.selling_interest ?? c.interested)}</td>
                             <td>{toYesNo(c.buying_interest ?? l.metadata?.custom_fields?.buying_interest)}</td>
-                            <td>{c.suburb || ''}</td>
-                            <td title={c.address || ''}>{c.address ? (c.address.length > 30 ? c.address.substring(0, 30) + '...' : c.address) : ''}</td>
-                            <td>{c.timeframe || ''}</td>
-                            <td title={c.description || ''}>{c.description ? (c.description.length > 50 ? c.description.substring(0, 50) + '...' : c.description) : ''}</td>
                             {/* Preferred Contact cell removed */}
                             <td>{c.email || ''}</td>
                             <td>{c.phone || ''}</td>
+                            <td title={c.address || ''}>{c.address ? (c.address.length > 30 ? c.address.substring(0, 30) + '...' : c.address) : ''}</td>
+                            <td title={c.description || ''}>{c.description ? (c.description.length > 50 ? c.description.substring(0, 50) + '...' : c.description) : ''}</td>
+                            <td>{c.suburb || ''}</td>
+                            <td>{c.timeframe || ''}</td>
                             <td>{formatDate(l.metadata?.updated_at) || '-'}</td>
                             <td>
                               <div className="row-actions">
@@ -998,6 +998,16 @@ export default function DashboardPage() {
                   <input name="phone" value={editForm.phone} onChange={onEditChange} className={editErrors.phone ? 'err' : ''} />
                   {editErrors.phone && <small className="field-error">{editErrors.phone}</small>}
                 </label>
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Address
+                  <input name="address" value={editForm.address} onChange={onEditChange} className={editErrors.address ? 'err' : ''} placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077" />
+                  {editErrors.address && <small className="field-error">{editErrors.address}</small>}
+                </label>
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Description
+                  <textarea name="description" value={editForm.description} onChange={onEditChange} className={editErrors.description ? 'err' : ''} placeholder="e.g., Looking for a 4-bedroom family home with garden and garage. Budget up to $1.5M. Need to be close to good schools." rows={3} style={{ padding: '8px 10px', border: '1px solid #e5e7eb', borderRadius: 6, resize: 'vertical' }} />
+                  {editErrors.description && <small className="field-error">{editErrors.description}</small>}
+                </label>
                 <label>
                   Suburb
                   <select name="suburb" value={editForm.suburb} onChange={onEditChange} className={editErrors.suburb ? 'err' : ''}>
@@ -1007,11 +1017,6 @@ export default function DashboardPage() {
                     ))}
                   </select>
                   {editErrors.suburb && <small className="field-error">{editErrors.suburb}</small>}
-                </label>
-                <label style={{ gridColumn: '1 / -1' }}>
-                  Address
-                  <input name="address" value={editForm.address} onChange={onEditChange} className={editErrors.address ? 'err' : ''} placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077" />
-                  {editErrors.address && <small className="field-error">{editErrors.address}</small>}
                 </label>
                 <label>
                   Timeframe
@@ -1023,11 +1028,6 @@ export default function DashboardPage() {
                     <option value="not sure">Not sure</option>
                   </select>
                   {editErrors.timeframe && <small className="field-error">{editErrors.timeframe}</small>}
-                </label>
-                <label style={{ gridColumn: '1 / -1' }}>
-                  Description
-                  <textarea name="description" value={editForm.description} onChange={onEditChange} className={editErrors.description ? 'err' : ''} placeholder="e.g., Looking for a 4-bedroom family home with garden and garage. Budget up to $1.5M. Need to be close to good schools." rows={3} style={{ padding: '8px 10px', border: '1px solid #e5e7eb', borderRadius: 6, resize: 'vertical' }} />
-                  {editErrors.description && <small className="field-error">{editErrors.description}</small>}
                 </label>
                 <label>
                   Status
