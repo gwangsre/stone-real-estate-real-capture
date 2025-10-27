@@ -33,6 +33,7 @@ export default function HomePage() {
   const [showSubmittedMessage, setShowSubmittedMessage] = React.useState(false);
   const [submittedMessageText, setSubmittedMessageText] = React.useState("");
   const [errors, setErrors] = React.useState({});
+  const [formHeaderText, setFormHeaderText] = React.useState("Thank you for your interest in Stone Real Estate.");
 
   const suburbOptions = [
     "Hornsby",
@@ -65,6 +66,25 @@ export default function HomePage() {
     if (!fields.interested_buying) errs.interested_buying = "Please select an option";
     return errs;
   }
+
+  React.useEffect(() => {
+    const fetchFormHeader = async () => {
+      try {
+        const response = await fetch('/api/v1/form-header');
+        if (response.ok) {
+          const data = await response.json();
+          if (data?.message) {
+            setFormHeaderText(data.message);
+          }
+        }
+      } catch (error) {
+        console.log('Could not fetch form header:', error);
+        // Keep default text if fetch fails
+      }
+    };
+
+    fetchFormHeader();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -173,8 +193,8 @@ export default function HomePage() {
             <CardContent sx={{ p: { xs: 3, md: 5 } }}>
               {!showSubmittedMessage ? (
                 <>
-                  <Typography variant="h5" className="lead-title" gutterBottom>
-                    Thank you for your interest in Stone Real Estate.
+                  <Typography variant="h5" className="lead-title" gutterBottom sx={{ whiteSpace: 'pre-line' }}>
+                    {formHeaderText}
                   </Typography>
 
                   <Typography variant="body1" sx={{ mb: 3, color: "#4b5563" }}>

@@ -8,6 +8,8 @@ const TABS = [
   { key: "leads", label: "Leads" },
   { key: "admins", label: "Admins" },
   { key: "messages", label: "Messages" },
+  { key: "form_header", label: "Form Header" },
+  { key: "footer", label: "Footer" },
 ];
 
 // Safely format date values from backend (ISO string, epoch, or Firestore Timestamp-like)
@@ -94,6 +96,8 @@ export default function DashboardPage() {
   const [leads, setLeads] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [formHeader, setFormHeader] = useState({ message: "" });
+  const [footer, setFooter] = useState({ message: "" });
 
   const [leadsLoading, setLeadsLoading] = useState(false);
   const [leadsError, setLeadsError] = useState(null);
@@ -101,6 +105,10 @@ export default function DashboardPage() {
   const [adminsError, setAdminsError] = useState(null);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState(null);
+  const [formHeaderLoading, setFormHeaderLoading] = useState(false);
+  const [formHeaderError, setFormHeaderError] = useState(null);
+  const [footerLoading, setFooterLoading] = useState(false);
+  const [footerError, setFooterError] = useState(null);
   // Add Admin modal state
   const [addingAdmin, setAddingAdmin] = useState(false);
   const [adminForm, setAdminForm] = useState({ username: '', password: '', first_name: '', last_name: '', email: '' });
@@ -134,6 +142,16 @@ export default function DashboardPage() {
   const [editingMessage, setEditingMessage] = useState(null);
   const [messageForm, setMessageForm] = useState({ message: "" });
   const [savingMessage, setSavingMessage] = useState(false);
+  
+  // Form Header edit modal state
+  const [editingFormHeader, setEditingFormHeader] = useState(false);
+  const [formHeaderForm, setFormHeaderForm] = useState({ message: "" });
+  const [savingFormHeader, setSavingFormHeader] = useState(false);
+  
+  // Footer edit modal state
+  const [editingFooter, setEditingFooter] = useState(false);
+  const [footerForm, setFooterForm] = useState({ message: "" });
+  const [savingFooter, setSavingFooter] = useState(false);
 
   // Edit modal state
   const [editingLead, setEditingLead] = useState(null); // the full lead object being edited
@@ -682,10 +700,92 @@ export default function DashboardPage() {
     }
   };
 
+  // Fetch form header
+  const fetchFormHeader = async () => {
+    setFormHeaderLoading(true);
+    setFormHeaderError(null);
+    try {
+      const { data } = await api.get('/api/v1/form-header');
+      setFormHeader(data || { message: "" });
+    } catch (err) {
+      setFormHeaderError(err.message || "Failed to load form header");
+      setFormHeader({ message: "" });
+    } finally {
+      setFormHeaderLoading(false);
+    }
+  };
+
+  // Fetch footer
+  const fetchFooter = async () => {
+    setFooterLoading(true);
+    setFooterError(null);
+    try {
+      const { data } = await api.get('/api/v1/footer');
+      setFooter(data || { message: "" });
+    } catch (err) {
+      setFooterError(err.message || "Failed to load footer");
+      setFooter({ message: "" });
+    } finally {
+      setFooterLoading(false);
+    }
+  };
+
+  // Form Header edit helpers
+  const openEditFormHeader = () => {
+    setFormHeaderForm({ message: formHeader.message || "" });
+    setEditingFormHeader(true);
+  };
+  const closeEditFormHeader = () => setEditingFormHeader(false);
+  const onFormHeaderFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormHeaderForm((f) => ({ ...f, [name]: value }));
+  };
+
+  const saveEditFormHeader = async () => {
+    try {
+      setSavingFormHeader(true);
+      const { data: updated } = await api.patch('/api/v1/form-header', { message: formHeaderForm.message });
+      setFormHeader({ message: updated?.message || formHeaderForm.message });
+      closeEditFormHeader();
+      pushToast('Form header updated successfully');
+    } catch (err) {
+      alert(`Failed to update form header: ${err.message}`);
+    } finally {
+      setSavingFormHeader(false);
+    }
+  };
+
+  // Footer edit helpers
+  const openEditFooter = () => {
+    setFooterForm({ message: footer.message || "" });
+    setEditingFooter(true);
+  };
+  const closeEditFooter = () => setEditingFooter(false);
+  const onFooterFormChange = (e) => {
+    const { name, value } = e.target;
+    setFooterForm((f) => ({ ...f, [name]: value }));
+  };
+
+  const saveEditFooter = async () => {
+    try {
+      setSavingFooter(true);
+      const { data: updated } = await api.patch('/api/v1/footer', { message: footerForm.message });
+      setFooter({ message: updated?.message || footerForm.message });
+      closeEditFooter();
+      pushToast('Footer updated successfully');
+    } catch (err) {
+      alert(`Failed to update footer: ${err.message}`);
+    } finally {
+      setSavingFooter(false);
+    }
+  };
+
   useEffect(() => {
     if (active === "leads") fetchLeads();
     if (active === "admins") fetchAdmins();
     if (active === "messages") fetchMessages();
+    if (active === "form_header") fetchFormHeader();
+    if (active === "footer") fetchFooter();
   }, [active]);
 
   return (
@@ -731,6 +831,12 @@ export default function DashboardPage() {
             )}
             {active === "messages" && (
               <button className="btn" onClick={fetchMessages}><span className="icon">↻</span> Refresh</button>
+            )}
+            {active === "form_header" && (
+              <button className="btn" onClick={fetchFormHeader}><span className="icon">↻</span> Refresh</button>
+            )}
+            {active === "footer" && (
+              <button className="btn" onClick={fetchFooter}><span className="icon">↻</span> Refresh</button>
             )}
           </div>
         </header>
@@ -982,6 +1088,70 @@ export default function DashboardPage() {
               )}
             </div>
           )}
+
+          {active === "form_header" && (
+            <div className="table-wrap">
+              {formHeaderLoading ? (
+                <div className="empty">Loading form header…</div>
+              ) : formHeaderError ? (
+                <div className="empty error">Error: {formHeaderError}</div>
+              ) : (
+                <div className="single-item-edit">
+                  <div className="item-display">
+                    <h3>Current Form Header:</h3>
+                    <div className="message-preview" style={{ 
+                      border: '1px solid #e5e7eb', 
+                      borderRadius: '6px', 
+                      padding: '16px', 
+                      backgroundColor: '#f9fafb',
+                      marginBottom: '16px',
+                      whiteSpace: 'pre-line'
+                    }}>
+                      {formHeader.message || 'No form header set'}
+                    </div>
+                    <button className="btn" onClick={openEditFormHeader}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
+                        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                      </svg>
+                      Edit Form Header
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {active === "footer" && (
+            <div className="table-wrap">
+              {footerLoading ? (
+                <div className="empty">Loading footer…</div>
+              ) : footerError ? (
+                <div className="empty error">Error: {footerError}</div>
+              ) : (
+                <div className="single-item-edit">
+                  <div className="item-display">
+                    <h3>Current Footer:</h3>
+                    <div className="message-preview" style={{ 
+                      border: '1px solid #e5e7eb', 
+                      borderRadius: '6px', 
+                      padding: '16px', 
+                      backgroundColor: '#f9fafb',
+                      marginBottom: '16px',
+                      whiteSpace: 'pre-line'
+                    }}>
+                      {footer.message || 'No footer set'}
+                    </div>
+                    <button className="btn" onClick={openEditFooter}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
+                        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                      </svg>
+                      Edit Footer
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </main>
       {editingLead && (
@@ -1104,6 +1274,48 @@ export default function DashboardPage() {
             <div className="modal-footer">
               <button className="btn" onClick={saveEditMessage} disabled={savingMessage}>{savingMessage ? 'Saving…' : 'Save'}</button>
               <button className="btn gray" onClick={closeEditMessage} disabled={savingMessage}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {editingFormHeader && (
+        <div className="modal-overlay" onClick={closeEditFormHeader}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Form Header</h3>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Form Header Text
+                  <textarea name="message" value={formHeaderForm.message} onChange={onFormHeaderFormChange} rows={5} style={{ padding: '8px 10px', border: '1px solid #e5e7eb', borderRadius: 6 }} placeholder="Enter the form header text..." />
+                </label>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={saveEditFormHeader} disabled={savingFormHeader}>{savingFormHeader ? 'Saving…' : 'Save'}</button>
+              <button className="btn gray" onClick={closeEditFormHeader} disabled={savingFormHeader}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {editingFooter && (
+        <div className="modal-overlay" onClick={closeEditFooter}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Footer</h3>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <label style={{ gridColumn: '1 / -1' }}>
+                  Footer Text
+                  <textarea name="message" value={footerForm.message} onChange={onFooterFormChange} rows={5} style={{ padding: '8px 10px', border: '1px solid #e5e7eb', borderRadius: 6 }} placeholder="Enter the footer text..." />
+                </label>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={saveEditFooter} disabled={savingFooter}>{savingFooter ? 'Saving…' : 'Save'}</button>
+              <button className="btn gray" onClick={closeEditFooter} disabled={savingFooter}>Cancel</button>
             </div>
           </div>
         </div>

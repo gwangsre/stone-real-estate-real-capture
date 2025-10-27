@@ -27,6 +27,18 @@ export const API_CONFIG = {
   // Admin endpoints
   ADMIN: {
     BASE: `${API_BASE_URL}/api/v1/admin`
+  },
+  
+  // Form Header endpoints
+  FORM_HEADER: {
+    PUBLIC: `${API_BASE_URL}/api/v1/form-header`,
+    ADMIN: `${API_BASE_URL}/api/v1/form-header`
+  },
+  
+  // Footer endpoints
+  FOOTER: {
+    PUBLIC: `${API_BASE_URL}/api/v1/footer`,
+    ADMIN: `${API_BASE_URL}/api/v1/footer`
   }
 };
 
