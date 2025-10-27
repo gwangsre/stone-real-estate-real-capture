@@ -225,6 +225,8 @@ export default function HomePage() {
                       name="address"
                       label="Address (Optional)"
                       fullWidth
+                      multiline
+                      rows={2}
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077"
@@ -233,11 +235,13 @@ export default function HomePage() {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12}>
                     <TextField
                       name="description"
                       label="Description (Optional)"
                       fullWidth
+                      multiline
+                      rows={3}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
