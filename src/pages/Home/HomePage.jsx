@@ -33,7 +33,7 @@ export default function HomePage() {
   const [showSubmittedMessage, setShowSubmittedMessage] = React.useState(false);
   const [submittedMessageText, setSubmittedMessageText] = React.useState("");
   const [errors, setErrors] = React.useState({});
-  const [formHeaderText, setFormHeaderText] = React.useState("Thank you for your interest in Stone Real Estate.");
+  const [formHeaderText, setFormHeaderText] = React.useState("Loading...");
 
   const suburbOptions = [
     "Hornsby",

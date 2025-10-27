@@ -4,7 +4,7 @@ import { API_CONFIG } from '../../../config/api.js';
 import './Footer.css';
 
 const Footer = () => {
-  const [footerText, setFooterText] = useState('© 2025 Stone Real Estate. 123 Paramatta Street, Sydney, Australia');
+  const [footerText, setFooterText] = useState('Loading...');
 
   useEffect(() => {
     const fetchFooterText = async () => {
