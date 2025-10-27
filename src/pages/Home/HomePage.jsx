@@ -220,6 +220,34 @@ export default function HomePage() {
                       helperText={errors.phone}
                     />
                   </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      name="address"
+                      label="Address (Optional)"
+                      fullWidth
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077"
+                      error={!!errors.address}
+                      helperText={errors.address}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      name="description"
+                      label="Description (Optional)"
+                      fullWidth
+                      multiline
+                      rows={3}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
+                      error={!!errors.description}
+                      helperText={errors.description}
+                    />
+                  </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={!!errors.suburb}>
                       <FormLabel>Suburb</FormLabel>
@@ -240,19 +268,6 @@ export default function HomePage() {
                       </Select>
                       {errors.suburb && <FormHelperText>{errors.suburb}</FormHelperText>}
                     </FormControl>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      name="address"
-                      label="Address (Optional)"
-                      fullWidth
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="e.g., 45 Pacific Highway, Hornsby NSW 2077"
-                      error={!!errors.address}
-                      helperText={errors.address}
-                    />
                   </Grid>
 
                   {/* <Grid item xs={12} sm={6}>
@@ -318,21 +333,6 @@ export default function HomePage() {
                       </Select>
                       {errors.timeframe && <FormHelperText>{errors.timeframe}</FormHelperText>}
                     </FormControl>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      name="description"
-                      label="Description (Optional)"
-                      fullWidth
-                      multiline
-                      rows={3}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
-                      error={!!errors.description}
-                      helperText={errors.description}
-                    />
                   </Grid>
 
                   <Grid item xs={12}>
