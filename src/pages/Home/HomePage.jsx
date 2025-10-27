@@ -201,7 +201,7 @@ export default function HomePage() {
                       helperText={errors.last_name}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                       name="email"
                       label="Email Address"
@@ -211,7 +211,7 @@ export default function HomePage() {
                       helperText={errors.email}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                       name="phone"
                       label="Phone Number"
@@ -220,7 +220,7 @@ export default function HomePage() {
                       helperText={errors.phone}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                       name="address"
                       label="Address (Optional)"
@@ -235,13 +235,13 @@ export default function HomePage() {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <TextField
                       name="description"
                       label="Description (Optional)"
                       fullWidth
                       multiline
-                      rows={3}
+                      rows={2}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Please describe your property needs, budget, preferences, or any specific requirements..."
