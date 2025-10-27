@@ -147,6 +147,8 @@ export default function DashboardPage() {
     timeframe: "",
     description: "",
     status: "",
+    selling: "",
+    buying: "",
   });
   const [editErrors, setEditErrors] = useState({});
 
@@ -163,6 +165,10 @@ export default function DashboardPage() {
     }
     
     setEditingLead(lead);
+    // Extract selling and buying interests
+    const sellingInterest = c.selling_interest ?? c.interested ?? "";
+    const buyingInterest = c.buying_interest ?? lead?.metadata?.custom_fields?.buying_interest ?? "";
+    
     setEditForm({
       first_name: c.first_name || "",
       last_name: c.last_name || "",
@@ -173,6 +179,8 @@ export default function DashboardPage() {
       timeframe: c.timeframe || "",
       description: c.description || "",
       status: currentStatus,
+      selling: typeof sellingInterest === 'boolean' ? (sellingInterest ? 'yes' : 'no') : String(sellingInterest || ''),
+      buying: typeof buyingInterest === 'boolean' ? (buyingInterest ? 'yes' : 'no') : String(buyingInterest || ''),
     });
     setEditErrors({});
   };
@@ -202,6 +210,8 @@ export default function DashboardPage() {
         timeframe: () => !v ? 'Timeframe required' : '',
         description: () => '', // Description is optional
         status: () => !v ? 'Status required' : '',
+        selling: () => !v ? 'Selling interest required' : '',
+        buying: () => !v ? 'Buying interest required' : '',
       };
       if (validators[name]) {
         const msg = validators[name]();
@@ -224,6 +234,8 @@ export default function DashboardPage() {
     if (!data.timeframe) errs.timeframe = 'Timeframe required';
     // description is optional - no validation needed
     if (!data.status) errs.status = 'Status required';
+    if (!data.selling) errs.selling = 'Selling interest required';
+    if (!data.buying) errs.buying = 'Buying interest required';
     return errs;
   };
 
@@ -248,6 +260,8 @@ export default function DashboardPage() {
       address: editForm.address.trim(),
       timeframe: editForm.timeframe,
       description: editForm.description.trim(),
+      selling_interest: editForm.selling === 'yes' ? true : editForm.selling === 'no' ? false : editForm.selling,
+      buying_interest: editForm.buying === 'yes' ? true : editForm.buying === 'no' ? false : editForm.buying,
     };
     
     // Build status object according to backend requirements
@@ -1028,6 +1042,24 @@ export default function DashboardPage() {
                   Description
                   <textarea name="description" value={editForm.description} onChange={onEditChange} className={editErrors.description ? 'err' : ''} placeholder="e.g., Looking for a 4-bedroom family home with garden and garage. Budget up to $1.5M. Need to be close to good schools." rows={3} style={{ padding: '8px 10px', border: '1px solid #e5e7eb', borderRadius: 6, resize: 'vertical' }} />
                   {editErrors.description && <small className="field-error">{editErrors.description}</small>}
+                </label>
+                <label>
+                  Selling Interest
+                  <select name="selling" value={editForm.selling} onChange={onEditChange} className={editErrors.selling ? 'err' : ''}>
+                    <option value="">Choose…</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                  {editErrors.selling && <small className="field-error">{editErrors.selling}</small>}
+                </label>
+                <label>
+                  Buying Interest
+                  <select name="buying" value={editForm.buying} onChange={onEditChange} className={editErrors.buying ? 'err' : ''}>
+                    <option value="">Choose…</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                  {editErrors.buying && <small className="field-error">{editErrors.buying}</small>}
                 </label>
                 <label>
                   Status
